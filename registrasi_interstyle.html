@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrasi - Online Store Fashion</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Form Registrasi</h1>
+    <form id="register-form">
+      <div class="form-group">
+        <label for="nama">Nama Lengkap:</label>
+        <input type="text" id="nama" name="nama" required placeholder="Masukkan Nama Lengkap">
+        <div class="error" id="nama-error">Nama lengkap harus diisi</div>
+      </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required placeholder="Masukkan Username">
+        <div class="error" id="username-error">Username harus diisi</div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required placeholder="contoh@email.com">
+        <div class="error" id="email-error">Masukkan email yang valid</div>
+      </div>
+      <div class="form-group">
+        <label for="hp">Nomor HP:</label>
+        <input type="text" id="hp" name="hp" required placeholder="08xxxxxxxx">
+        <div class="error" id="hp-error">Nomor HP harus valid (08xxxxxxxx)</div>
+      </div>
+      <div class="form-group">
+        <label for="tgl">Tanggal Lahir:</label>
+        <input type="date" id="tgl" name="tgl" required>
+        <div class="error" id="tgl-error">Tanggal lahir harus diisi</div>
+      </div>
+      <div class="form-group">
+        <label for="gender">Jenis Kelamin:</label>
+        <select id="gender" name="gender" required>
+          <option value="" disabled selected>-- Pilih Jenis Kelamin --</option>
+          <option value="Laki-laki">Laki-laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+        <div class="error" id="gender-error">Jenis kelamin harus dipilih</div>
+      </div>
+      <div class="form-group">
+        <label for="alamat">Alamat:</label>
+        <textarea id="alamat" name="alamat" rows="3" cols="30" required placeholder="Masukkan Alamat Lengkap"></textarea>
+        <div class="error" id="alamat-error">Alamat harus diisi</div>
+      </div
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required placeholder="Minimal 8 karakter">
+        <span class="password-toggle" onclick="togglePasswordVisibility('password')">👁️</span>
+        <div class="error" id="password-error">Password minimal 8 karakter</div>
+      </div>
+      <div class="form-group">
+        <label for="konfirmasi">Konfirmasi Password:</label>
+        <input type="password" id="konfirmasi" name="konfirmasi" required placeholder="Ulangi Password">
+        <span class="password-toggle" onclick="togglePasswordVisibility('konfirmasi')">👁️</span>
+        <div class="error" id="konfirmasi-error">Password tidak cocok</div>
+      </div>
+      <div class="btn-group">
+        <input type="submit" value="Daftar">
+        <input type="reset" value="Reset">
+      </div>
+    </form>
+    <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.container').classList.add('animate-in');
+    });
+    function togglePasswordVisibility(id) {
+        const input = document.getElementById(id);
+        const icon = input.nextElementSibling;
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            icon.textContent = '👁️';
+        }
+    }
+    document.getElementById('register-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      let isValid = true;
+      document.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const hpRegex = /^08\d{8,11}$/;
+      const password = document.getElementById('password').value;
+      const konfirmasi = document.getElementById('konfirmasi').value;
+      const email = document.getElementById('email').value;
+      const inputs = this.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        const parent = input.parentElement;
+        if (input.required && input.value.trim() === '') {
+          parent.classList.add('error');
+          isValid = false;
+        }
+      });
+      if (!emailRegex.test(email)) {
+        document.getElementById('email').parentElement.classList.add('error');
+        isValid = false;
+      }
+      if (!hpRegex.test(document.getElementById('hp').value)) {
+        document.getElementById('hp').parentElement.classList.add('error');
+        isValid = false;
+      }
+      if (password.length < 8) {
+        document.getElementById('password').parentElement.classList.add('error');
+        isValid = false;
+      }
+      if (konfirmasi !== password) {
+        document.getElementById('konfirmasi').parentElement.classList.add('error');
+        isValid = false;
+      }
+      if (isValid) {
+        const userData = {
+          email: email,
+          password: password,
+        };
+        localStorage.setItem('userData', JSON.stringify(userData));
+        alert('Registrasi berhasil! Silakan login dengan akun Anda.');
+        window.location.href = 'login.html';
+      }
+    });
+    document.getElementById('register-form').addEventListener('reset', function() {
+      document.querySelectorAll('.form-group').forEach(group => group.classList.remove('error'));
+    });
+  </script>
+</body>
+</html>
